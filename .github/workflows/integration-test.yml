@@ -1,0 +1,67 @@
+name: Integration test for Rust
+
+on:
+  push:
+    branches: main
+    paths: ['src/**', 'benches/**']
+  pull_request:
+    branches: main
+    paths: ['src/**', 'benches/**']
+
+env:
+    MOLD_VERSION: 2.4.0
+
+jobs:
+  
+    cargo_fmt:
+      name: Cargo Format
+      runs-on: ubuntu-latest
+      timeout-minutes: ${{ (github.ref == 'refs/heads/express' && 1) || 60 }}
+      continue-on-error: ${{ github.ref == 'refs/heads/express' }}
+      steps:
+        - uses: actions/checkout@v4
+        - name: Add fmt
+          run: rustup component add rustfmt
+        - name: Run fmt
+          run: cargo fmt -- --check
+
+    cargo_clippy:
+      name: Cargo Clippy
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/cache@v4
+          with:
+            path: |
+              ~/.cargo/bin/
+              ~/.cargo/registry/index/
+              ~/.cargo/registry/cache/
+              ~/.cargo/git/db/
+              target/
+            key: ${{ runner.os }}-cargo
+        - uses: rui314/setup-mold@v1
+          with:
+            mold-version: ${{ env.MOLD_VERSION }}
+        - name: Add clippy
+          run: rustup component add clippy
+        - name: Run clippy
+          run: cargo clippy
+
+    cargo_test:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+        - uses: actions/cache@v4
+          with:
+            path: |
+              ~/.cargo/bin/
+              ~/.cargo/registry/index/
+              ~/.cargo/registry/cache/
+              ~/.cargo/git/db/
+              target/
+            key: ${{ runner.os }}-cargo
+        - uses: rui314/setup-mold@v1
+          with:
+            mold-version: ${{ env.MOLD_VERSION }}
+        - name: cargo test
+          run: cargo test
