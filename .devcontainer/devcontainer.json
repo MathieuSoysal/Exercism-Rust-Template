@@ -14,7 +14,10 @@
 				"serayuzgur.crates",
 				"vadimcn.vscode-lldb",
 				"tamasfe.even-better-toml",
-				"ZhangYue.rust-mod-generator"
+				"ZhangYue.rust-mod-generator",
+				"usernamehw.errorlens",
+				"seatonjiang.gitmoji-vscode",
+				"github.vscode-github-actions"
 			]
 		}
 	}
