@@ -11,7 +11,7 @@ jobs:
       env:
         BENCHER_PROJECT: rust-template
         BENCHER_TESTBED: ubuntu-latest
-        BENCHER_ADAPTER: rust-bench
+        BENCHER_ADAPTER: rust_bench
       steps:
         - uses: actions/checkout@v4
         - uses: bencherdev/bencher@main
