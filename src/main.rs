@@ -16,18 +16,13 @@ pub fn play_game(n: u32) {
 }
 
 fn is_fibonacci_number(n: u32) -> bool {
-    for i in 0..=n {
-        let (mut previous, mut current) = (0, 1);
-        while current < i {
-            let next = previous + current;
-            previous = current;
-            current = next;
-        }
-        if current == n {
-            return true;
-        }
+    let (mut previous, mut current) = (0, 1);
+    while current < n {
+        let next = previous + current;
+        previous = current;
+        current = next;
     }
-    false
+    current == n
 }
 
 pub fn fizz_buzz_fibonacci(n: u32) -> String {
