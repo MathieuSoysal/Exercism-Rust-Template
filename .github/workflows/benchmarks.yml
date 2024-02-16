@@ -22,20 +22,7 @@ jobs:
         BENCHER_API_TOKEN: ${{ secrets.BENCHER_API_TOKEN }}
       steps:
         - uses: actions/checkout@v4
-        - uses: actions/cache@v4
-          with:
-            path: |
-              ~/.cargo/bin/
-              ~/.cargo/registry/index/
-              ~/.cargo/registry/cache/
-              ~/.cargo/git/db/
-              target/
-            key: ${{ runner.os }}-cargo
-        - uses: rui314/setup-mold@v1
-          with:
-            mold-version: ${{ env.MOLD_VERSION }}
-        - name: Install `bencher` CLI
-          run: cargo install --debug --path services/cli --locked --force
+        - uses: bencherdev/bencher@main
         - name: Dogfooding Benchmarks with Bencher
           run: |
             bencher run \
