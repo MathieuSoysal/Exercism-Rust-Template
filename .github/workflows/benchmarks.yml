@@ -1,0 +1,24 @@
+name: Benchmark
+
+on:
+   push:
+     branches: main
+
+jobs:
+    benchmark_with_bencher:
+      name: Continuous Benchmarking with Bencher
+      runs-on: ubuntu-latest
+      env:
+        BENCHER_PROJECT: rust-template
+        BENCHER_TESTBED: ubuntu-latest
+        BENCHER_ADAPTER: rust-bench
+      steps:
+        - uses: actions/checkout@v4
+        - uses: bencherdev/bencher@main
+        - name: Track Benchmarks with Bencher
+          run: |
+            bencher run \
+            --branch "$GITHUB_REF_NAME" \
+            --token "${{ secrets.BENCHER_API_TOKEN }}" \
+            --err \
+            "bencher mock"
