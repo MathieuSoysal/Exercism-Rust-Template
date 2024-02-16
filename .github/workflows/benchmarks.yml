@@ -4,21 +4,43 @@ on:
    push:
      branches: main
 
+env:
+   MOLD_VERSION: 2.4.0
+
 jobs:
     benchmark_with_bencher:
       name: Continuous Benchmarking with Bencher
       runs-on: ubuntu-latest
+      timeout-minutes: ${{ (github.ref == 'refs/heads/express' && 1) || 60 }}
+      # This will fail whenever Bencher Cloud is down
+      # or there are any breaking changes to the report format
+      continue-on-error: true
       env:
         BENCHER_PROJECT: rust-template
         BENCHER_TESTBED: ubuntu-latest
-        BENCHER_ADAPTER: rust_bench
+        BENCHER_ADAPTER: rust
+        BENCHER_API_TOKEN: ${{ secrets.BENCHER_API_TOKEN }}
       steps:
         - uses: actions/checkout@v4
-        - uses: bencherdev/bencher@main
-        - name: Track Benchmarks with Bencher
+        - uses: actions/cache@v4
+          with:
+            path: |
+              ~/.cargo/bin/
+              ~/.cargo/registry/index/
+              ~/.cargo/registry/cache/
+              ~/.cargo/git/db/
+              target/
+            key: ${{ runner.os }}-cargo
+        - uses: rui314/setup-mold@v1
+          with:
+            mold-version: ${{ env.MOLD_VERSION }}
+        - name: Install `bencher` CLI
+          run: cargo install --debug --path services/cli --locked --force
+        - name: Dogfooding Benchmarks with Bencher
           run: |
             bencher run \
-            --branch "$GITHUB_REF_NAME" \
-            --token "${{ secrets.BENCHER_API_TOKEN }}" \
+            --if-branch "$GITHUB_REF_NAME" \
+            --else-if-branch "$GITHUB_BASE_REF" \
             --err \
-            "bencher mock"
+            --github-actions ${{ secrets.GITHUB_TOKEN }} \
+            "cargo bench"
