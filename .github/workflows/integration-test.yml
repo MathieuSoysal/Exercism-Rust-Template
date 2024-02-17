@@ -3,10 +3,10 @@ name: Integration test for Rust
 on:
   push:
     branches: main
-    paths: ['src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
+    paths: ['deny.toml', 'src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
   pull_request:
     branches: main
-    paths: ['src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
+    paths: ['deny.toml', 'src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
 
 env:
     MOLD_VERSION: 2.4.0
