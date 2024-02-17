@@ -14,80 +14,7 @@ env:
 
 jobs:
 
-    cargo_fmt:
-      name: Cargo Format
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Install Rust nightly
-          uses: dtolnay/rust-toolchain@master
-          id: rust-toolchain
-          with:
-            toolchain: nightly
-            components: rustfmt
-        - name: Cache Cargo
-          uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
-        - name: Check formatting
-          run: cargo fmt -- --check
-        - name: Check documentation
-          run: cargo doc --no-deps --all-features
-        - name: Check typos
-          uses: crate-ci/typos@master
-        - name: Lint dependencies
-          uses: EmbarkStudios/cargo-deny-action@v1
-
-    cargo_clippy:
-      name: Cargo Clippy
-      needs: [cargo_fmt]
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Install Rust nightly
-          uses: dtolnay/rust-toolchain@master
-          id: rust-toolchain
-          with:
-            toolchain: nightly
-        - name: Cache Cargo
-          uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
-        - uses: rui314/setup-mold@v1
-          with:
-            mold-version: ${{ env.MOLD_VERSION }}
-        - name: Add clippy
-          run: rustup component add clippy
-        - name: Run clippy
-          run: cargo clippy
-
-    cargo_test:
-        name: Cargo Test
-        needs: [cargo_fmt]
-        strategy:
-          fail-fast: false
-          matrix:
-            os: [ubuntu-latest, windows-latest, macos-latest]
-        runs-on: ${{ matrix.os }}
-        steps:
-        - uses: actions/checkout@v4
-        - name: Install Rust nightly
-          uses: dtolnay/rust-toolchain@master
-          id: rust-toolchain
-          with:
-            toolchain: nightly
-        - name: Cache Cargo
-          uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
-        - uses: rui314/setup-mold@v1
-          with:
-            mold-version: ${{ env.MOLD_VERSION }}
-        - name: cargo test
-          run: cargo test
-
-    check:
+  cargo_check:
       name: Cargo Check
       strategy:
         fail-fast: false
@@ -113,9 +40,83 @@ jobs:
           env:
             RUST_BACKTRACE: full
 
-    cargo_mutants: # https://mutants.rs
+  cargo_fmt:
+      name: Cargo Format
+      needs: [cargo_check]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
+          with:
+            toolchain: nightly
+            components: rustfmt
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+        - name: Check formatting
+          run: cargo fmt -- --check
+        - name: Check documentation
+          run: cargo doc --no-deps --all-features
+        - name: Check typos
+          uses: crate-ci/typos@master
+        - name: Lint dependencies
+          uses: EmbarkStudios/cargo-deny-action@v1
+
+  cargo_clippy:
+      name: Cargo Clippy
+      needs: [cargo_fmt]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
+          with:
+            toolchain: nightly
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+        - uses: rui314/setup-mold@v1
+          with:
+            mold-version: ${{ env.MOLD_VERSION }}
+        - name: Add clippy
+          run: rustup component add clippy
+        - name: Run clippy
+          run: cargo clippy
+
+  cargo_test:
+        name: Cargo Test
+        needs: [cargo_fmt]
+        strategy:
+          fail-fast: false
+          matrix:
+            os: [ubuntu-latest, windows-latest, macos-latest]
+        runs-on: ${{ matrix.os }}
+        steps:
+        - uses: actions/checkout@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
+          with:
+            toolchain: nightly
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+        - uses: rui314/setup-mold@v1
+          with:
+            mold-version: ${{ env.MOLD_VERSION }}
+        - name: cargo test
+          run: cargo test
+
+  cargo_mutants: # https://mutants.rs
       name: Cargo Mutants
-      needs: [cargo_test, cargo_clippy, cargo_fmt]
+      needs: [cargo_test]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
@@ -141,7 +142,7 @@ jobs:
             name: mutants-out
             path: mutants.out
 
-    cargo_coverage:
+  cargo_coverage:
       name: Cargo Coverage
       needs: [cargo_test]
       runs-on: ubuntu-latest
