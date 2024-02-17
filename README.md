@@ -21,3 +21,4 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 
 ### Secrets
 - [ ] Add `BENCHER_API_KEY` in your repository secrets
+- [ ] Add `CODECOV_TOKEN` in your repository secrets
