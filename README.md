@@ -5,7 +5,7 @@
 
 Basic Rust template with rust devcontainer and some CI to test and track benchmarcks automatically.
 
-## Ressources
+## Resources
 
 - Benchmark tool : https://bencher.dev/learn/benchmarking/rust/libtest-bench/
 - Benchmark CI : https://bencher.dev/docs/how-to/github-actions/
