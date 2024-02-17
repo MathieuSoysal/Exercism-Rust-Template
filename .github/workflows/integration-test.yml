@@ -13,31 +13,49 @@ env:
     CARGO_TERM_COLOR: always
 
 jobs:
-  
+
     cargo_fmt:
       name: Cargo Format
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v4
-        - name: Add fmt
-          run: rustup component add rustfmt
-        - name: Run fmt
-          run: cargo fmt -- --check
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
+          with:
+            toolchain: nightly
+            components: rustfmt
+        - name: Install cargo-make
+          uses: taiki-e/install-action@cargo-make
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+        - name: Check formatting
+          run: cargo make lint-format
+        - name: Check documentation
+          run: cargo make lint-docs
+        - name: Check typos
+          uses: crate-ci/typos@master
+        - name: Lint dependencies
+          uses: EmbarkStudios/cargo-deny-action@v1
 
     cargo_clippy:
       name: Cargo Clippy
+      needs: [cargo_fmt]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-        - uses: actions/cache@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
           with:
-            path: |
-              ~/.cargo/bin/
-              ~/.cargo/registry/index/
-              ~/.cargo/registry/cache/
-              ~/.cargo/git/db/
-              target/
-            key: ${{ runner.os }}-cargo
+            toolchain: nightly
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: rui314/setup-mold@v1
           with:
             mold-version: ${{ env.MOLD_VERSION }}
@@ -47,38 +65,71 @@ jobs:
           run: cargo clippy
 
     cargo_test:
+        name: Cargo Test
+        needs: [cargo_fmt]
         strategy:
           fail-fast: false
           matrix:
             os: [ubuntu-latest, windows-latest, macos-latest]
-        name: Cargo Test
         runs-on: ${{ matrix.os }}
         steps:
         - uses: actions/checkout@v4
-        - uses: actions/cache@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
           with:
-            path: |
-              ~/.cargo/bin/
-              ~/.cargo/registry/index/
-              ~/.cargo/registry/cache/
-              ~/.cargo/git/db/
-              target/
-            key: ${{ runner.os }}-cargo
+            toolchain: nightly
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: rui314/setup-mold@v1
           with:
             mold-version: ${{ env.MOLD_VERSION }}
         - name: cargo test
           run: cargo test
 
-    cargo-mutants: # https://mutants.rs
+    check:
+      name: Cargo Check
+      strategy:
+        fail-fast: false
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
+          with:
+            toolchain: nightly
+        - name: Install cargo-make
+          uses: taiki-e/install-action@cargo-make
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+        - name: Run cargo make check
+          run: cargo make check
+          env:
+            RUST_BACKTRACE: full
+
+    cargo_mutants: # https://mutants.rs
       name: Cargo Mutants
       needs: [cargo_test, cargo_clippy, cargo_fmt]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-        - uses: actions-rs/toolchain@v1
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
           with:
             toolchain: nightly
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: taiki-e/install-action@v2
           name: Install cargo-mutants using install-action
           with:
@@ -92,15 +143,22 @@ jobs:
             name: mutants-out
             path: mutants.out
 
-    coverage:
+    cargo_coverage:
+      name: Cargo Coverage
+      needs: [cargo_test]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-        - name: Install Rust
-          uses: dtolnay/rust-toolchain@stable
+        - name: Install Rust nightly
+          uses: dtolnay/rust-toolchain@master
+          id: rust-toolchain
           with:
             toolchain: nightly
             components: llvm-tools
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - name: cargo install cargo-llvm-cov
           uses: taiki-e/install-action@cargo-llvm-cov
         - name: cargo llvm-cov
