@@ -26,12 +26,14 @@ jobs:
           with:
             toolchain: nightly
             components: rustfmt
-        - name: Install cargo-make
-          uses: taiki-e/install-action@cargo-make
+        - name: Cache Cargo
+          uses: Swatinem/rust-cache@v2
+          with:
+            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - name: Check formatting
-          run: cargo make lint-format
+          run: cargo fmt -- --check
         - name: Check documentation
-          run: cargo make lint-docs
+          run: cargo doc --no-deps --all-features
         - name: Check typos
           uses: crate-ci/typos@master
         - name: Lint dependencies
