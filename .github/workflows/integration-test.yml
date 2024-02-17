@@ -3,10 +3,10 @@ name: Integration test for Rust
 on:
   push:
     branches: main
-    paths: ['src/**', 'benches/**']
+    paths: ['src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
   pull_request:
     branches: main
-    paths: ['src/**', 'benches/**']
+    paths: ['src/**', 'benches/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/integration-test.yml']
 
 env:
     MOLD_VERSION: 2.4.0
@@ -16,8 +16,6 @@ jobs:
     cargo_fmt:
       name: Cargo Format
       runs-on: ubuntu-latest
-      timeout-minutes: ${{ (github.ref == 'refs/heads/express' && 1) || 60 }}
-      continue-on-error: ${{ github.ref == 'refs/heads/express' }}
       steps:
         - uses: actions/checkout@v4
         - name: Add fmt
@@ -48,6 +46,7 @@ jobs:
           run: cargo clippy
 
     cargo_test:
+        name: Cargo Test
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v4
@@ -65,3 +64,50 @@ jobs:
             mold-version: ${{ env.MOLD_VERSION }}
         - name: cargo test
           run: cargo test
+
+    cargo-mutants: # https://mutants.rs
+      name: Cargo Mutants
+      needs: [cargo_test, cargo_clippy, cargo_fmt]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions-rs/toolchain@v1
+          with:
+            toolchain: nightly
+        - uses: taiki-e/install-action@v2
+          name: Install cargo-mutants using install-action
+          with:
+            tool: cargo-mutants
+        - name: Run mutant tests
+          run: cargo mutants -vV --in-place
+        - name: Archive results
+          uses: actions/upload-artifact@v3
+          if: always()
+          with:
+            name: mutants-out
+            path: mutants.out
+
+    coverage:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Install Rust
+          uses: dtolnay/rust-toolchain@stable
+          with:
+            toolchain: nightly
+            components: llvm-tools
+        - name: cargo install cargo-llvm-cov
+          uses: taiki-e/install-action@cargo-llvm-cov
+        - name: cargo llvm-cov
+          run: cargo llvm-cov --all-features --lcov --output-path lcov.info
+          env:
+            CARGO_HUSKY_DONT_INSTALL_HOOKS: true
+        - name: Upload to codecov.io
+          uses: codecov/codecov-action@v4
+          with:
+            fail_ci_if_error: true
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        
