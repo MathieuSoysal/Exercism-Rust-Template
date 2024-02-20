@@ -7,7 +7,7 @@ fn main() {
         .get(1)
         .expect("Give one argument")
         .parse::<u32>()
-        .expect("Given argument should be a number.");
+        .expect("Given argument should be a integer.");
     play_game(i);
 }
 
@@ -39,11 +39,50 @@ pub fn fizz_buzz_fibonacci(n: u32) -> String {
 }
 
 #[cfg(test)]
-mod benchmarks {
-    use test::Bencher;
+mod tests {
+    use super::*;
+    use rstest::*;
+    use std::time::Duration;
 
-    use super::play_game;
+    #[rstest]
+    #[case(1, "Fibonacci")]
+    #[case(2, "Fibonacci")]
+    #[case(3, "Fibonacci")]
+    #[case(4, "4")]
+    #[case(5, "Fibonacci")]
+    #[case(6, "Fizz")]
+    #[case(7, "7")]
+    #[case(8, "Fibonacci")]
+    #[case(9, "Fizz")]
+    #[case(10, "Buzz")]
+    #[case(15, "FizzBuzz")]
+    #[timeout(Duration::from_millis(80))]
+    fn test_fizz_buzz_fibonacci(#[case] input: u32, #[case] expected: &str) {
+        assert_eq!(fizz_buzz_fibonacci(input), expected);
+    }
+
+    #[rstest]
+    #[case(1, true)]
+    #[case(2, true)]
+    #[case(3, true)]
+    #[case(4, false)]
+    #[case(5, true)]
+    #[case(6, false)]
+    #[case(7, false)]
+    #[case(8, true)]
+    #[case(9, false)]
+    #[case(10, false)]
+    #[timeout(Duration::from_millis(80))]
+    fn test_is_fibonacci_number(#[case] input: u32, #[case] expected: bool) {
+        assert_eq!(is_fibonacci_number(input), expected);
+    }
+}
+
+#[cfg(test)]
+mod benchmarks {
+    use super::*;
     use std::hint::black_box;
+    use test::Bencher;
 
     #[bench]
     fn bench_play_game(b: &mut Bencher) {
