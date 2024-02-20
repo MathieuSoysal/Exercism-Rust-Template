@@ -38,7 +38,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	,"postCreateCommand": "rustup component add clippy fmt"
+	,"postCreateCommand": "rustup component add clippy rustfmt"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
