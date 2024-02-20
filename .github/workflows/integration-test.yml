@@ -118,6 +118,8 @@ jobs:
       name: Cargo Mutants
       needs: [cargo_test]
       runs-on: ubuntu-latest
+      permissions:
+        pull-requests: write
       steps:
         - uses: actions/checkout@v4
         - name: Install Rust nightly
@@ -135,12 +137,10 @@ jobs:
             tool: cargo-mutants
         - name: Run mutant tests
           run: cargo mutants -vV --in-place
-        - name: Archive results
-          uses: actions/upload-artifact@v4
+        - uses: mshick/add-pr-comment@v2
           if: always()
           with:
-            name: mutants-out
-            path: mutants.out
+            message-path: mutants.out/missed.txt
 
   cargo_coverage:
       name: Cargo Coverage
