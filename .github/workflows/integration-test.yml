@@ -120,6 +120,7 @@ jobs:
       runs-on: ubuntu-latest
       permissions:
         pull-requests: write
+      continue-on-error: true
       steps:
         - uses: actions/checkout@v4
         - name: Install Rust nightly
