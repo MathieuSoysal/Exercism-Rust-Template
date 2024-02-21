@@ -174,4 +174,32 @@ jobs:
             CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-        
+  cargo_fuzzing: # https://rust-fuzz.github.io/book/cargo-fuzz
+    name: Cargo Fuzzing
+    needs: [cargo_test]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@master
+        id: rust-toolchain
+        with:
+          toolchain: nightly
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
+      - uses: taiki-e/install-action@v2
+        name: Install cargo-fuzz using install-action
+        with:
+          tool: cargo-fuzz
+      - name: Run mutant tests
+        run: cargo fuzz run fuzz_play_game -- -max_len=4 -max_total_time=180
+        continue-on-error: true
+      - uses: mshick/add-pr-comment@v2
+        if: failure()
+        with:
+          message-path: fuzz/artifacts/crash.*
