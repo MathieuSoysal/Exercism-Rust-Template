@@ -19,6 +19,9 @@
 				"seatonjiang.gitmoji-vscode",
 				"github.vscode-github-actions"
 			]
+		},
+		"codespaces": {
+			"openFiles": ["README.md"]
 		}
 	}
 
@@ -38,7 +41,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	,"postCreateCommand": "rustup component add clippy rustfmt && (curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash) && cargo binstall cargo-mutants -y"
+	,"postCreateCommand": "rustup component add clippy rustfmt && (curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash) && cargo binstall cargo-mutants -y && $ cargo install cargo-fuzz"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
