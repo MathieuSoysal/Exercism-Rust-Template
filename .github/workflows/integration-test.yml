@@ -203,7 +203,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: fuzzing
-          path: ./fuzz/artifacts/**/.*
+          path: fuzz/artifacts
       - uses: mshick/add-pr-comment@v2
         if: failure()
         with:
