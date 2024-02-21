@@ -196,8 +196,15 @@ jobs:
         with:
           tool: cargo-fuzz
       - name: Run mutant tests
+        id: fuzz
         run: cargo fuzz run fuzz_play_game -- -max_len=4 -max_total_time=180
+      - name: upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: fuzzing
+          path: ./fuzz/artifacts/**/.*
       - uses: mshick/add-pr-comment@v2
         if: failure()
         with:
-          message-path: fuzz/artifacts/**/crash.*
+          message: "Fuzzing failed, artifacts are uploaded."
