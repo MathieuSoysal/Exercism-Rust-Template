@@ -198,7 +198,6 @@ jobs:
           tool: cargo-fuzz
       - name: Run mutant tests
         run: cargo fuzz run fuzz_play_game -- -max_len=4 -max_total_time=180
-        continue-on-error: true
       - uses: mshick/add-pr-comment@v2
         if: failure()
         with:
