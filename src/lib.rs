@@ -5,7 +5,6 @@ pub fn play_game(n: u32) {
     println!("{}", fizz_buzz_fibonacci(n));
 }
 
-
 fn is_fibonacci_number(n: u32) -> bool {
     let (mut previous, mut current) = (0, 1);
     while current < n {

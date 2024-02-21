@@ -7,5 +7,5 @@ extern crate libfuzzer_sys;
 use template_exercisme::fizz_buzz_fibonacci;
 
 fuzz_target!(|data: u32| {
-        fizz_buzz_fibonacci(data);
+    fizz_buzz_fibonacci(data);
 });
