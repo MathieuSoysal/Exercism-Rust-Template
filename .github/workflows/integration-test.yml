@@ -33,8 +33,6 @@ jobs:
           uses: taiki-e/install-action@cargo-make
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - name: Run cargo make check
           run: cargo make check
           env:
@@ -55,8 +53,6 @@ jobs:
             components: rustfmt
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - name: Check formatting
           run: cargo fmt -- --check
         - name: Check documentation
@@ -79,8 +75,6 @@ jobs:
             toolchain: nightly
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: rui314/setup-mold@v1
           with:
             mold-version: ${{ env.MOLD_VERSION }}
@@ -106,8 +100,6 @@ jobs:
             toolchain: nightly
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: rui314/setup-mold@v1
           with:
             mold-version: ${{ env.MOLD_VERSION }}
@@ -130,8 +122,6 @@ jobs:
             toolchain: nightly
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - uses: taiki-e/install-action@v2
           name: Install cargo-mutants using install-action
           with:
@@ -158,8 +148,6 @@ jobs:
             components: llvm-tools
         - name: Cache Cargo
           uses: Swatinem/rust-cache@v2
-          with:
-            shared-key: ${{ steps.rust-toolchain.outputs.cachekey }}+${{ runner.os }}
         - name: cargo install cargo-llvm-cov
           uses: taiki-e/install-action@cargo-llvm-cov
         - name: cargo llvm-cov
@@ -174,4 +162,61 @@ jobs:
             CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-        
+  cargo_fuzzing: # https://rust-fuzz.github.io/book/cargo-fuzz
+    name: Cargo Fuzzing
+    needs: [cargo_test]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@master
+        id: rust-toolchain
+        with:
+          toolchain: nightly
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        name: Install cargo-fuzz using install-action
+        with:
+          tool: cargo-fuzz
+      - name: Run mutant tests
+        id: fuzz
+        run: cargo fuzz run fuzz_play_game -- -max_len=4 -max_total_time=180
+      - name: upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: fuzzing
+          path: fuzz/artifacts
+      - uses: mshick/add-pr-comment@v2
+        if: failure()
+        with:
+          message: "Fuzzing failed, artifacts are uploaded."
+
+
+  cargo_bench:
+    name: Cargo Bench
+    needs: [cargo_test]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    env:
+      BENCHER_PROJECT: rust-template
+      BENCHER_TESTBED: ubuntu-latest
+      BENCHER_ADAPTER: rust
+      BENCHER_API_TOKEN: ${{ secrets.BENCHER_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bencherdev/bencher@main
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+      - name: Dogfooding Benchmarks with Bencher
+        run: |
+          bencher run \
+          --if-branch "$GITHUB_REF_NAME" \
+          --else-if-branch "$GITHUB_BASE_REF" \
+          --err \
+          --github-actions ${{ secrets.GITHUB_TOKEN }} \
+          "cargo bench"
