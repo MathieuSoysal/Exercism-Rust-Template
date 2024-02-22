@@ -77,4 +77,9 @@ mod benchmarks {
     fn bench_play_game_1_000_000(b: &mut Bencher) {
         b.iter(|| std::hint::black_box(play_game(1_000_000)));
     }
+
+    #[bench]
+    fn bench_play_game_2_971_215_073(b: &mut Bencher) {
+        b.iter(|| std::hint::black_box(play_game(2_971_215_073)));
+    }
 }
