@@ -7,7 +7,7 @@ pub fn play_game(n: u32) {
 
 fn is_fibonacci_number(n: u32) -> bool {
     let (mut previous, mut current) = (0, 1);
-    while current < n && n < 2971215073 {
+    while current < n && n <= 2971215073 {
         let next = previous + current;
         previous = current;
         current = next;
@@ -34,6 +34,7 @@ mod tests {
 
     #[test]
     fn test_is_fibonacci_number() {
+        assert!(is_fibonacci_number(2_971_215_073));
         assert_eq!(is_fibonacci_number(u32::MAX), false);
     }
 
