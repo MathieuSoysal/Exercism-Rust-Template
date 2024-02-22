@@ -33,7 +33,6 @@ mod tests {
     use super::*;
 
     #[test]
-    #[ignore]
     fn test_is_fibonacci_number() {
         assert_eq!(is_fibonacci_number(u32::MAX), false);
     }
