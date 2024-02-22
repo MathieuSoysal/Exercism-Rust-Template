@@ -200,6 +200,8 @@ jobs:
     name: Cargo Bench
     needs: [cargo_test]
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     env:
       BENCHER_PROJECT: rust-template
       BENCHER_TESTBED: ubuntu-latest
