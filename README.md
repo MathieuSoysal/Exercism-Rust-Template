@@ -15,6 +15,7 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 ## Customizing template
 
 ### Ctrl + Shift + F for replace:
+- [ ] `Rust template` -> with your project name
 - [ ] `template-exercisme` -> with your rust project name
 - [ ] `Exercism-Rust-Template` -> with your GitHub repository name
 - [ ] `rust-template` -> with your Bencher project name
