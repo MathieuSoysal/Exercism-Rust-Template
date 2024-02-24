@@ -31,3 +31,31 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 - [ ] Add `BENCHER_API_KEY` in your repository secrets
 - [ ] Add `CODECOV_TOKEN` in your repository secrets
 - [ ] Add `CARGO_REGISTRY_TOKEN` in your repository secrets
+
+## Install 
+
+
+<details>
+<summary>MacOS</summary>
+Install the latest version for your system:
+
+```bash
+curl -sS https://raw.githubusercontent.com/MathieuSoysal/Exercisme-Rust-Template/main/install/install.sh | sh
+```
+</details>
+
+<details>
+<summary>Linux</summary>
+
+Install the latest version for your system:
+```bash
+curl -sS https://raw.githubusercontent.com/MathieuSoysal/Exercisme-Rust-Template/main/install/install.sh | sh
+```
+</details>
+
+<details>
+<summary>Windows</summary>
+
+Install the latest version for your system: [Install](https://github.com/MathieuSoysal/Exercisme-Rust-Template/releases/latest/download/starship-x86_64-pc-windows-msvc.msi)
+
+</details>
