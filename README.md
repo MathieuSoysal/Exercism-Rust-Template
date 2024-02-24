@@ -6,7 +6,7 @@
 [Conventionnal Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
 
-Basic Rust template with rust devcontainer and some CI to test and track benchmarcks automatically.
+Rust template that contains automatic benchmarking, automatic mutation testing, automatic fuzz testing. 
 
 ## Resources
 
@@ -25,14 +25,14 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 - [ ] `rust-template` -> with your Bencher project name
 - [ ] `MathieuSoysal` -> with your GitHub username
 - [ ] `2024` -> with the current year
-- [ ] `A template for exercism exercises in Rust` -> with your project description
+- [ ] `Rust template that contains automatic benchmarking, automatic mutation testing, automatic fuzz testing. ` -> with your project description
 
 ### Secrets
 - [ ] Add `BENCHER_API_KEY` in your repository secrets
 - [ ] Add `CODECOV_TOKEN` in your repository secrets
 - [ ] Add `CARGO_REGISTRY_TOKEN` in your repository secrets
 
-## Install 
+## 🚀 Installation
 
 
 <details>
@@ -59,3 +59,18 @@ curl -sS https://raw.githubusercontent.com/MathieuSoysal/Exercisme-Rust-Template
 Install the latest version for your system: [Install](https://github.com/MathieuSoysal/Exercisme-Rust-Template/releases/latest/download/starship-x86_64-pc-windows-msvc.msi)
 
 </details>
+
+## 🤝 Contributing
+
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/MathieuSoysal/Exercism-Rust-Template/labels/🌱%20good%20first%20issue).
+
+If you are interested in helping contribute to Rust template, don't hesitate to create your issue [Create new Issue](https://github.com/MathieuSoysal/Exercism-Rust-Template/issues/new/choose).
+
+## 📝 License
+
+Copyright © 2019-present, [Rust template Contributors](https://github.com/MathieuSoysal/Exercism-Rust-Template/graphs/contributors).<br>
+This project is [ISC](https://github.com/MathieuSoysal/Exercism-Rust-Template/blob/main/LICENSE) licensed.
+
+## ⭐️ Support project
+
+If you like this project, feel free to support it by clicking on the ⭐️ button. 
