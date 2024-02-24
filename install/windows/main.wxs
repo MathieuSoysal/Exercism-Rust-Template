@@ -61,7 +61,7 @@
 
   <Product Id='*' Name='rust-template' UpgradeCode='0E489D6B-0FEA-4B6E-B57F-62DD1E892C46' Manufacturer='Rust template Contributors' Language='1033' Codepage='1252' Version='$(var.Version)'>
 
-    <Package Id='*' Keywords='Installer' Description='A template for exercism exercises in Rust' Manufacturer='Rust template Contributors' InstallerVersion='450' Languages='1033' Compressed='yes' InstallScope='perMachine' SummaryCodepage='1252' />
+    <Package Id='*' Keywords='Installer' Description='Rust template that contains automatic benchmarking, automatic mutation testing, automatic fuzz testing. ' Manufacturer='Rust template Contributors' InstallerVersion='450' Languages='1033' Compressed='yes' InstallScope='perMachine' SummaryCodepage='1252' />
 
     <MajorUpgrade Schedule='afterInstallInitialize' DowngradeErrorMessage='A newer version of [ProductName] is already installed. Setup will now exit.' />
 
