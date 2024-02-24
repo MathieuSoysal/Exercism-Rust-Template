@@ -3,6 +3,8 @@
 [![codecov](https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template/graph/badge.svg?token=MrM1EEfgvD)](https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template)
 [![Integration test for Rust](https://github.com/MathieuSoysal/Exercism-Rust-Template/actions/workflows/integration-test.yml/badge.svg)](https://github.com/MathieuSoysal/Exercism-Rust-Template/actions/workflows/integration-test.yml)
 
+[Conventionnal Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
 
 Basic Rust template with rust devcontainer and some CI to test and track benchmarcks automatically.
 
@@ -11,6 +13,8 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 - Benchmark tool : https://bencher.dev/learn/benchmarking/rust/libtest-bench/
 - Benchmark CI : https://bencher.dev/docs/how-to/github-actions/
 - mutation testing : https://mutants.rs
+- Code coverage : https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template
+- Crate publish: https://crates.io/settings/tokens
 
 ## Customizing template
 
@@ -21,7 +25,9 @@ Basic Rust template with rust devcontainer and some CI to test and track benchma
 - [ ] `rust-template` -> with your Bencher project name
 - [ ] `MathieuSoysal` -> with your GitHub username
 - [ ] `2024` -> with the current year
+- [ ] `A template for exercism exercises in Rust` -> with your project description
 
 ### Secrets
 - [ ] Add `BENCHER_API_KEY` in your repository secrets
 - [ ] Add `CODECOV_TOKEN` in your repository secrets
+- [ ] Add `CARGO_REGISTRY_TOKEN` in your repository secrets

@@ -1,6 +1,6 @@
 [package]
 name = "template_exercisme"
-escription = "A template for exercism exercises in Rust"
+description = "A template for exercism exercises in Rust"
 repository = "https://github.com/MathieuSoysal/Exercism-Rust-Template"
 readme = "README.md"
 version = "0.1.0"
