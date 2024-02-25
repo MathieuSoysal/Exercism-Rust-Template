@@ -66,6 +66,10 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 
 If you are interested in helping contribute to Rust template, don't hesitate to create your issue [Create new Issue](https://github.com/MathieuSoysal/Exercism-Rust-Template/issues/new/choose).
 
+### 🚀 Quick start contributing
+
+**Quick start contributing** you just need to click to this link [Start Online Devcontainer](https://codespaces.new/MathieuSoysal/Exercism-Rust-Template?quickstart=1) to automatically create a development environment for this project and start contributing ;) and you can also read the [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
+
 ## 📝 License
 
 Copyright © 2019-present, [Rust template Contributors](https://github.com/MathieuSoysal/Exercism-Rust-Template/graphs/contributors).<br>
