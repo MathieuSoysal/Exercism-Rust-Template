@@ -18,7 +18,8 @@
 				"ZhangYue.rust-mod-generator",
 				"usernamehw.errorlens",
 				"seatonjiang.gitmoji-vscode",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"viper-admin.prusti-assistant"
 			]
 		},
 		"codespaces": {
