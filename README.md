@@ -15,6 +15,7 @@ Rust template that contains automatic benchmarking, automatic mutation testing, 
 - mutation testing : https://mutants.rs
 - Code coverage : https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template
 - Crate publish: https://crates.io/settings/tokens
+- Crate prusti : https://viperproject.github.io/prusti-dev/user-guide/tour/getting-started
 
 ## Customizing template
 
