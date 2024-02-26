@@ -36,3 +36,35 @@ devcontainer:
 fuzzing:
   - fuzz/**/*
 
+feature:
+ - head-branch: ['^feature', 'feature']
+
+bug:
+ - head-branch: ['^bug', 'bug']
+
+documentation:
+ - head-branch: ['^docs', 'docs']
+
+chore:
+ - head-branch: ['^chore', 'chore']
+
+ci:
+ - head-branch: ['^ci', 'ci']
+
+build:
+  - head-branch: ['^build', 'build']
+
+test:
+  - head-branch: ['^test', 'test']
+
+perf:
+  - head-branch: ['^perf', 'perf']
+
+fix:
+  - head-branch: ['^fix', 'fix']
+
+refactor:
+  - head-branch: ['^refactor', 'refactor']
+
+style:
+  - head-branch: ['^style', 'style']
