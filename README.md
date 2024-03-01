@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template/graph/badge.svg?token=MrM1EEfgvD)](https://codecov.io/gh/MathieuSoysal/Exercism-Rust-Template)
 [![Integration test for Rust](https://github.com/MathieuSoysal/Exercism-Rust-Template/actions/workflows/integration-test.yml/badge.svg)](https://github.com/MathieuSoysal/Exercism-Rust-Template/actions/workflows/integration-test.yml)
 
-[Conventionnal Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
 
 Rust template that contains automatic benchmarking, automatic mutation testing, automatic fuzz testing. 

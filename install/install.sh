@@ -234,7 +234,7 @@ detect_arch() {
     arm64) arch="aarch64" ;;
   esac
 
-  # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
+  # `uname -m` in some cases miss-reports 32-bit OS as 64-bit, so double check
   if [ "${arch}" = "x86_64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
     arch=i686
   elif [ "${arch}" = "aarch64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
