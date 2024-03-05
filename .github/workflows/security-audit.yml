@@ -78,6 +78,18 @@ jobs:
           - name: Rudra
             uses: sslab-gatech/Rudra@master
 
+    cargo_deadblock:
+      name: Cargo lockbud check for deadlocks
+      runs-on: ubuntu-latest
+      container:
+        image: burtonqin/lockbud
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+        - name: Generate code coverage
+          run: |
+            cargo lockbud -k deadlock
+
 
 # Possible other tools:
 # https://github.com/model-checking/kani
