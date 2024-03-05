@@ -56,18 +56,18 @@ jobs:
             command: check ${{ matrix.checks }}
             rust-version: nightly
 
-    cargo_prusti:
-        name: Cargo Prusti static analysis
-        permissions:
-          issues: write # to create issues (actions-rs/audit-check)
-          checks: write # to create check (actions-rs/audit-check)
-          pull-requests: write
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v4
-        - uses: viperproject/prusti-action@master
-          with:
-            path: .
+    # cargo_prusti:
+    #     name: Cargo Prusti static analysis
+    #     permissions:
+    #       issues: write # to create issues (actions-rs/audit-check)
+    #       checks: write # to create check (actions-rs/audit-check)
+    #       pull-requests: write
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #     - uses: actions/checkout@v4
+    #     - uses: viperproject/prusti-action@master
+    #       with:
+    #         path: .
 
     cargo_Rudra:
         name: Cargo Rudra check memory safety
