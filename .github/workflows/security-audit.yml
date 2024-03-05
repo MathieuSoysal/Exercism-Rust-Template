@@ -68,7 +68,6 @@ jobs:
         - uses: viperproject/prusti-action@master
           with:
             path: .
-            token: ${{ secrets.GITHUB_TOKEN }}
 
     cargo_Rudra:
         name: Cargo Rudra check memory safety
