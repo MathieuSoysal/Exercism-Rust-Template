@@ -5,6 +5,7 @@ use prusti_contracts::*;
 
 const MAX_FIBONACCI: u32 = 2_971_215_073;
 
+#[trusted]
 pub fn play_game(n: u32) {
     println!("{}", fizz_buzz_fibonacci(n));
 }
