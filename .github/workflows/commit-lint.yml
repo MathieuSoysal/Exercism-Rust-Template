@@ -2,7 +2,14 @@ name: Check if commit is conventional
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
+  
   commitlint:
     runs-on: ubuntu-latest
     steps:
